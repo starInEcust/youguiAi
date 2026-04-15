@@ -40,16 +40,13 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row gap-12 md:gap-8 items-start">
           <div className="md:w-1/4">
             <div className="mb-4">
-              <div className="text-5xl font-black tracking-tight leading-none">
-                <span className="block">
-                  <span className="inline-block w-12 h-12 bg-white text-black text-3xl font-black flex items-center justify-center rounded-sm">
-                    N
-                  </span>
-                </span>
-                <span className="block mt-1 text-2xl tracking-[0.2em]">
-                  NEUROVA
-                </span>
-              </div>
+              <Link to="/" className="inline-block max-w-[200px] md:max-w-[240px]">
+                <img
+                  src="/Neurova-02.png"
+                  alt="Neurova"
+                  className="w-full h-auto object-contain"
+                />
+              </Link>
             </div>
           </div>
 

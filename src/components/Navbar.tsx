@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { SALES_MAILTO } from "../constants/contact";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -33,9 +34,12 @@ export default function Navbar() {
       }`}
     >
       <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
-        <Link to="/" className="text-xl font-bold tracking-widest">
-          <span className="text-white">N</span>
-          <span className="text-white text-lg">EUROVA</span>
+        <Link to="/" className="flex items-center shrink-0">
+          <img
+            src="/Neurova-03.png"
+            alt="Neurova"
+            className="h-8 w-auto object-contain md:h-9"
+          />
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
@@ -51,12 +55,12 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:block">
-          <Link
-            to="/contact"
+          <a
+            href={SALES_MAILTO}
             className="text-sm px-5 py-2 rounded-full border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all"
           >
             Request Demo
-          </Link>
+          </a>
         </div>
 
         <button
@@ -84,13 +88,13 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Link
-              to="/contact"
+            <a
+              href={SALES_MAILTO}
               className="text-center px-5 py-2 rounded-full border border-white/20"
               onClick={() => setMobileOpen(false)}
             >
               Request Demo
-            </Link>
+            </a>
           </div>
         </motion.div>
       )}

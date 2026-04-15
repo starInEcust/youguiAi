@@ -6,6 +6,7 @@ import SecurityPage from "./pages/Security";
 import AboutPage from "./pages/About";
 import CareersPage from "./pages/Careers";
 import ContactPage from "./pages/Contact";
+import PrivacyPage from "./pages/Privacy";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/careers" element={<CareersPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
       </Routes>
       <Footer />
     </div>

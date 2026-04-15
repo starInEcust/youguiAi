@@ -18,15 +18,9 @@ const stats: StatItem[] = [
   },
   {
     value: 65,
-    suffix: "M+",
+    suffix: "+",
     label: "Data Sources",
-    sublabel: "Access to millions of high-quality financial documents",
-  },
-  {
-    value: 99.9,
-    suffix: "%",
-    label: "Accuracy",
-    sublabel: "Enterprise-grade precision in data processing",
+    sublabel: "Covering global markets with comprehensive financial data",
   },
   {
     value: 500,
@@ -83,7 +77,7 @@ export default function Stats() {
   return (
     <section className="relative py-20" ref={ref}>
       <div className="mx-auto max-w-7xl px-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {stats.map((s, i) => (
             <motion.div
               key={s.label}
