@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const faqs = [
   {
-    q: "How is Neurova different from ChatGPT?",
+    q: "How is Neurova different from other large language models?",
     a: "Neurova is purpose-built for financial services, with proprietary models trained on financial data and specialized features for financial analysis. We also provide enterprise-grade security and compliance.",
   },
   {

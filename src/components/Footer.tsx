@@ -13,7 +13,7 @@ const footerCols = [
     title: "Product",
     links: [
       { label: "Features", href: "/#platform-features" },
-      { label: "Solutions", href: "/#solutions" },
+      { label: "Solutions", href: "/?section=solutions" },
     ],
   },
   {

@@ -1,5 +1,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import {
+  CAREERS_EMAIL,
+  CAREERS_MAILTO,
+  createCareerApplicationMailto,
+} from "../constants/contact";
 
 interface Position {
   num: string;
@@ -551,10 +556,10 @@ export default function CareersPage() {
                 </span>
                 <br />
                 <a
-                  href="mailto:careers@neurovaai.com"
+                  href={CAREERS_MAILTO}
                   className="text-sm text-blue-400 hover:underline"
                 >
-                  careers@neurovaai.com
+                  {CAREERS_EMAIL}
                 </a>
               </div>
             </motion.div>
@@ -725,9 +730,7 @@ export default function CareersPage() {
 
                 <div className="mt-8 flex flex-col gap-3 border-t border-white/8 pt-6 sm:flex-row">
                   <a
-                    href={`mailto:career@neurovaai.com?subject=${encodeURIComponent(
-                      `Application - ${selectedPosition.title}`,
-                    )}`}
+                    href={createCareerApplicationMailto(selectedPosition.title)}
                     className="inline-flex items-center justify-center rounded-full border border-purple-500/40 bg-purple-500/10 px-5 py-3 text-sm font-medium text-white transition-colors hover:border-purple-400/60 hover:bg-purple-500/20"
                   >
                     Apply for this role

@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import type { FormEvent } from "react";
+import { INFO_EMAIL, INFO_MAILTO, createInfoMailto } from "../constants/contact";
 
 const sectionAnim = {
   initial: { opacity: 0, y: 40 },
@@ -8,6 +10,27 @@ const sectionAnim = {
 };
 
 export default function ContactPage() {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get("name")?.toString().trim() ?? "";
+    const email = formData.get("email")?.toString().trim() ?? "";
+    const company = formData.get("company")?.toString().trim() ?? "";
+    const message = formData.get("message")?.toString().trim() ?? "";
+
+    if (!name || !email || !message) {
+      return;
+    }
+
+    window.location.href = createInfoMailto({
+      name,
+      email,
+      company,
+      message,
+    });
+  }
+
   return (
     <main className="pt-24">
       <section className="relative py-20 overflow-hidden">
@@ -33,10 +56,10 @@ export default function ContactPage() {
                 Contact
               </h2>
               <a
-                href="mailto:info@neurovaai.com"
+                href={INFO_MAILTO}
                 className="text-sm text-blue-400 hover:underline"
               >
-                info@neurovaai.com
+                {INFO_EMAIL}
               </a>
 
               <h2 className="text-lg font-bold gradient-text italic mt-8 mb-3">
@@ -57,14 +80,17 @@ export default function ContactPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
             >
-              <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-5" onSubmit={handleSubmit}>
                 <div>
                   <label className="block text-xs text-gray-400 mb-1.5">
                     Name
                   </label>
                   <input
+                    name="name"
                     type="text"
                     placeholder="Your name"
+                    autoComplete="name"
+                    required
                     className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500/50 transition-colors placeholder:text-gray-600"
                   />
                 </div>
@@ -73,8 +99,11 @@ export default function ContactPage() {
                     Email
                   </label>
                   <input
+                    name="email"
                     type="email"
                     placeholder="you@email.com"
+                    autoComplete="email"
+                    required
                     className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500/50 transition-colors placeholder:text-gray-600"
                   />
                 </div>
@@ -83,8 +112,10 @@ export default function ContactPage() {
                     Company
                   </label>
                   <input
+                    name="company"
                     type="text"
                     placeholder="Your company"
+                    autoComplete="organization"
                     className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500/50 transition-colors placeholder:text-gray-600"
                   />
                 </div>
@@ -93,8 +124,10 @@ export default function ContactPage() {
                     Message
                   </label>
                   <textarea
+                    name="message"
                     placeholder="How can we help you?"
                     rows={4}
+                    required
                     className="w-full bg-white/[0.03] border border-white/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500/50 transition-colors placeholder:text-gray-600 resize-none"
                   />
                 </div>
