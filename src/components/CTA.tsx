@@ -1,5 +1,6 @@
 import { useEffect, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { SALES_MAILTO } from "../constants/contact";
 
 interface Node {
@@ -263,6 +264,8 @@ function NeuralSVG() {
 }
 
 export default function CTA() {
+  const navigate = useNavigate();
+
   return (
     <section className="relative py-24 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -319,14 +322,15 @@ export default function CTA() {
                   Request Demo
                 </span>
               </motion.a>
-              <motion.a
-                href="/contact"
+              <motion.button
+                type="button"
+                onClick={() => navigate("/contact")}
                 className="text-sm px-8 py-3.5 rounded-lg border border-white/10 hover:border-white/25 transition-all font-medium text-gray-300 hover:text-white"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
                 Contact Us
-              </motion.a>
+              </motion.button>
             </div>
           </motion.div>
 

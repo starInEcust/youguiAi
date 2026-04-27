@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const rotatingFeatures = [
   "Automated Insights to Actions",
@@ -296,6 +297,7 @@ function ScanLine() {
 export default function Hero() {
   const [featureIdx, setFeatureIdx] = useState(0);
   const [titleReady, setTitleReady] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -398,8 +400,9 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 1.0 }}
               className="mt-8 flex gap-4"
             >
-              <motion.a
-                href="/contact"
+              <motion.button
+                type="button"
+                onClick={() => navigate("/contact")}
                 className="group relative text-sm px-8 py-3.5 rounded-lg font-medium overflow-hidden"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
@@ -409,7 +412,7 @@ export default function Hero() {
                 <span className="relative z-10 text-black font-semibold">
                   Get Started
                 </span>
-              </motion.a>
+              </motion.button>
               <motion.a
                 href="#solutions"
                 className="text-sm px-8 py-3.5 rounded-lg border border-white/10 hover:border-white/25 transition-all font-medium text-gray-300 hover:text-white"

@@ -38,7 +38,7 @@ export default function Navbar() {
           <img
             src="/Neurova-03.png"
             alt="Neurova"
-            className="h-12 w-auto object-contain md:h-14"
+            className="h-16 w-auto object-contain md:h-20"
           />
         </Link>
 
