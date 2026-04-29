@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
+import EngineVisual from "./EngineVisual";
 
 const features = [
   {
@@ -204,24 +205,7 @@ export default function BackendEngine() {
               </div>
             </div>
 
-            <div className="hidden md:flex items-center justify-center">
-              <div className="relative w-full aspect-square max-w-sm rounded-2xl overflow-hidden bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-blue-900/30 border border-white/5">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="relative">
-                    <div className="w-32 h-32 rounded-full border-2 border-blue-500/30 flex items-center justify-center animate-pulse">
-                      <div className="w-20 h-20 rounded-full border border-blue-400/40 flex items-center justify-center">
-                        <span className="text-2xl font-bold text-blue-400">
-                          AI
-                        </span>
-                      </div>
-                    </div>
-                    <div className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-blue-500/50 animate-ping" />
-                    <div className="absolute -bottom-3 -left-3 w-3 h-3 rounded-full bg-purple-500/50 animate-ping [animation-delay:1s]" />
-                  </div>
-                </div>
-                <div className="absolute inset-0 grid-bg opacity-30" />
-              </div>
-            </div>
+            <EngineVisual activeTab={activeTab} />
           </div>
         </motion.div>
       </div>

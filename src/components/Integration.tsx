@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import IntegrationVisual from "./IntegrationVisual";
 
 const integrations = [
   {
@@ -41,9 +42,10 @@ export default function Integration() {
             <h2 className="text-3xl md:text-4xl font-bold italic gradient-text mb-4">
               Seamless Integration
             </h2>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-400 mb-8">
               Extend your capabilities with our powerful integration ecosystem
             </p>
+            <IntegrationVisual />
           </motion.div>
 
           <motion.div

@@ -413,14 +413,15 @@ export default function Hero() {
                   Get Started
                 </span>
               </motion.button>
-              <motion.a
-                href="#solutions"
+              <motion.button
+                type="button"
+                onClick={() => navigate("/?section=solutions")}
                 className="text-sm px-8 py-3.5 rounded-lg border border-white/10 hover:border-white/25 transition-all font-medium text-gray-300 hover:text-white"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
                 Learn More
-              </motion.a>
+              </motion.button>
             </motion.div>
           </div>
 
