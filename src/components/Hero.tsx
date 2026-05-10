@@ -1,13 +1,6 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useCallback, useState } from "react";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-
-const rotatingFeatures = [
-  "Automated Insights to Actions",
-  "Real-Time Market Intelligence",
-  "AI-Powered Due Diligence",
-  "Predictive Financial Analytics",
-];
 
 const PARTICLE_COUNT = 60;
 const CONNECTION_DISTANCE = 120;
@@ -151,88 +144,315 @@ function ParticleCanvas() {
   );
 }
 
-const metricCards = [
-  {
-    label: "Portfolio ROI",
-    value: "+24.7%",
-    sub: "vs last quarter",
-    color: "green" as const,
-    bars: [40, 55, 35, 65, 50, 80, 72],
-  },
-  {
-    label: "Risk Score",
-    value: "Low",
-    sub: "across 12 funds",
-    color: "cyan" as const,
-    bars: [20, 15, 25, 18, 22, 12, 16],
-  },
-  {
-    label: "Signals Found",
-    value: "1,247",
-    sub: "today",
-    color: "purple" as const,
-    bars: [30, 50, 45, 70, 60, 85, 90],
-  },
-  {
-    label: "Time Saved",
-    value: "86%",
-    sub: "per analysis cycle",
-    color: "green" as const,
-    bars: [45, 55, 60, 70, 75, 80, 86],
-  },
-  {
-    label: "Data Sources",
-    value: "340+",
-    sub: "connected live",
-    color: "cyan" as const,
-    bars: [60, 50, 70, 65, 80, 75, 90],
-  },
-  {
-    label: "Accuracy",
-    value: "99.2%",
-    sub: "prediction rate",
-    color: "purple" as const,
-    bars: [88, 90, 85, 92, 95, 93, 99],
-  },
+function polar(angle: number, radius: number, cx = 200, cy = 200) {
+  const rad = (angle * Math.PI) / 180;
+  return { x: cx + Math.cos(rad) * radius, y: cy + Math.sin(rad) * radius };
+}
+
+const satellites = [
+  { angle: 25, radius: 168, color: "#4ade80", size: 3, delay: 0 },
+  { angle: 95, radius: 168, color: "#22d3ee", size: 2.5, delay: 0.4 },
+  { angle: 200, radius: 168, color: "#8b5cf6", size: 3, delay: 0.8 },
+  { angle: 305, radius: 168, color: "#22d3ee", size: 2.5, delay: 1.2 },
 ];
 
-type MetricColor = "green" | "cyan" | "purple";
+const klineBars = [
+  28, 36, 30, 42, 38, 50, 46, 58, 52, 64, 60, 72, 68, 80, 74, 66, 70, 62, 56,
+  64, 58, 50, 56, 48, 54, 60, 68, 76, 70, 64,
+];
 
-const colorMap: Record<MetricColor, { border: string; bg: string; text: string; bar: string }> = {
-  green: {
-    border: "border-green-500/25",
-    bg: "bg-green-500/[0.03]",
-    text: "text-green-400",
-    bar: "bg-green-400",
-  },
-  cyan: {
-    border: "border-cyan-500/25",
-    bg: "bg-cyan-500/[0.03]",
-    text: "text-cyan-400",
-    bar: "bg-cyan-400",
-  },
-  purple: {
-    border: "border-purple-500/25",
-    bg: "bg-purple-500/[0.03]",
-    text: "text-purple-400",
-    bar: "bg-purple-400",
-  },
-};
+function IntelligenceOrb() {
+  const cx = 200;
+  const cy = 200;
+  const sphereR = 130;
 
-function MiniChart({ bars, color }: { bars: number[]; color: MetricColor }) {
-  const c = colorMap[color];
+  const meridians = [-60, -30, 0, 30, 60];
+  const parallels = [-50, -25, 0, 25, 50];
+
   return (
-    <div className="flex items-end gap-[3px] h-8">
-      {bars.map((h, i) => (
-        <motion.div
-          key={i}
-          className={`w-[4px] rounded-sm ${c.bar} opacity-40`}
-          initial={{ height: 0 }}
-          animate={{ height: `${h}%` }}
-          transition={{ duration: 0.5, delay: 1.2 + i * 0.06 }}
+    <svg
+      viewBox="0 0 400 400"
+      className="w-full h-auto max-w-[460px] mx-auto"
+    >
+      <defs>
+        <radialGradient id="sphereGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="rgba(34,211,238,0.10)" />
+          <stop offset="55%" stopColor="rgba(16,40,60,0.25)" />
+          <stop offset="100%" stopColor="rgba(0,0,0,0.6)" />
+        </radialGradient>
+        <radialGradient id="sphereInner" cx="35%" cy="35%" r="65%">
+          <stop offset="0%" stopColor="rgba(74,222,128,0.18)" />
+          <stop offset="60%" stopColor="rgba(74,222,128,0)" />
+        </radialGradient>
+        <radialGradient id="haloGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="rgba(74,222,128,0.18)" />
+          <stop offset="60%" stopColor="rgba(34,211,238,0.06)" />
+          <stop offset="100%" stopColor="rgba(74,222,128,0)" />
+        </radialGradient>
+        <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="rgba(74,222,128,0)" />
+          <stop offset="50%" stopColor="rgba(74,222,128,0.7)" />
+          <stop offset="100%" stopColor="rgba(34,211,238,0)" />
+        </linearGradient>
+        <linearGradient id="ringGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="rgba(139,92,246,0)" />
+          <stop offset="50%" stopColor="rgba(139,92,246,0.55)" />
+          <stop offset="100%" stopColor="rgba(34,211,238,0)" />
+        </linearGradient>
+        <linearGradient id="klineGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stopColor="rgba(74,222,128,0.05)" />
+          <stop offset="100%" stopColor="rgba(74,222,128,0.55)" />
+        </linearGradient>
+        <clipPath id="sphereClip">
+          <circle cx={cx} cy={cy} r={sphereR} />
+        </clipPath>
+        <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2" />
+        </filter>
+      </defs>
+
+      <motion.circle
+        cx={cx}
+        cy={cy}
+        r="190"
+        fill="url(#haloGrad)"
+        animate={{ opacity: [0.5, 0.8, 0.5], scale: [1, 1.04, 1] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        style={{ transformOrigin: `${cx}px ${cy}px` }}
+      />
+
+      <circle cx={cx} cy={cy} r={sphereR} fill="url(#sphereGrad)" />
+      <circle cx={cx} cy={cy} r={sphereR} fill="url(#sphereInner)" />
+      <circle
+        cx={cx}
+        cy={cy}
+        r={sphereR}
+        fill="none"
+        stroke="rgba(74,222,128,0.35)"
+        strokeWidth="1"
+      />
+
+      <g clipPath="url(#sphereClip)" opacity="0.5">
+        <motion.g
+          animate={{ rotate: 360 }}
+          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+          style={{ transformOrigin: `${cx}px ${cy}px` }}
+        >
+          {meridians.map((tilt) => (
+            <ellipse
+              key={`m-${tilt}`}
+              cx={cx}
+              cy={cy}
+              rx={Math.abs(Math.sin((tilt * Math.PI) / 180)) * sphereR}
+              ry={sphereR}
+              fill="none"
+              stroke="rgba(34,211,238,0.35)"
+              strokeWidth="0.6"
+            />
+          ))}
+        </motion.g>
+        {parallels.map((p) => {
+          const ry = (Math.abs(p) / 90) * sphereR;
+          const offsetY = (p / 90) * sphereR * 0.95;
+          return (
+            <ellipse
+              key={`p-${p}`}
+              cx={cx}
+              cy={cy + offsetY}
+              rx={Math.sqrt(Math.max(sphereR * sphereR - offsetY * offsetY, 0))}
+              ry={ry * 0.18 + 1}
+              fill="none"
+              stroke="rgba(74,222,128,0.25)"
+              strokeWidth="0.5"
+            />
+          );
+        })}
+      </g>
+
+      <ellipse
+        cx={cx}
+        cy={cy}
+        rx="170"
+        ry="48"
+        fill="none"
+        stroke="rgba(255,255,255,0.06)"
+        strokeWidth="1"
+        strokeDasharray="2 5"
+        transform={`rotate(-18 ${cx} ${cy})`}
+      />
+      <motion.g
+        animate={{ rotate: 360 }}
+        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+        style={{ transformOrigin: `${cx}px ${cy}px` }}
+      >
+        <ellipse
+          cx={cx}
+          cy={cy}
+          rx="170"
+          ry="48"
+          fill="none"
+          stroke="url(#ringGrad)"
+          strokeWidth="1.2"
+          transform={`rotate(-18 ${cx} ${cy})`}
+        />
+      </motion.g>
+
+      <ellipse
+        cx={cx}
+        cy={cy}
+        rx="180"
+        ry="62"
+        fill="none"
+        stroke="rgba(255,255,255,0.05)"
+        strokeWidth="1"
+        strokeDasharray="2 5"
+        transform={`rotate(28 ${cx} ${cy})`}
+      />
+      <motion.g
+        animate={{ rotate: -360 }}
+        transition={{ duration: 36, repeat: Infinity, ease: "linear" }}
+        style={{ transformOrigin: `${cx}px ${cy}px` }}
+      >
+        <ellipse
+          cx={cx}
+          cy={cy}
+          rx="180"
+          ry="62"
+          fill="none"
+          stroke="url(#ringGrad2)"
+          strokeWidth="1"
+          transform={`rotate(28 ${cx} ${cy})`}
+        />
+      </motion.g>
+
+      <g clipPath="url(#sphereClip)">
+        <motion.path
+          d={`M ${cx - sphereR} ${cy + 60}
+              C ${cx - 60} ${cy + 30}, ${cx - 30} ${cy + 90}, ${cx + 20} ${cy + 50}
+              S ${cx + 100} ${cy + 80}, ${cx + sphereR} ${cy + 40}`}
+          fill="none"
+          stroke="rgba(74,222,128,0.5)"
+          strokeWidth="1.2"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: [0, 0.6, 0.4] }}
+          transition={{
+            pathLength: { duration: 2, delay: 0.6 },
+            opacity: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+          }}
+        />
+        <motion.path
+          d={`M ${cx - sphereR} ${cy - 20}
+              C ${cx - 80} ${cy - 50}, ${cx - 20} ${cy + 10}, ${cx + 40} ${cy - 30}
+              S ${cx + 110} ${cy - 10}, ${cx + sphereR} ${cy - 40}`}
+          fill="none"
+          stroke="rgba(34,211,238,0.45)"
+          strokeWidth="1"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: [0, 0.5, 0.3] }}
+          transition={{
+            pathLength: { duration: 2, delay: 1 },
+            opacity: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+          }}
+        />
+      </g>
+
+      <g transform={`translate(${cx - 60}, ${cy + 78})`} clipPath="url(#sphereClip)">
+        {klineBars.map((h, i) => {
+          const barW = 3.2;
+          const x = i * (barW + 0.8);
+          return (
+            <motion.rect
+              key={`k-${i}`}
+              x={x}
+              y={40 - h * 0.4}
+              width={barW}
+              height={h * 0.4}
+              fill="url(#klineGrad)"
+              initial={{ scaleY: 0, opacity: 0 }}
+              animate={{ scaleY: 1, opacity: 0.85 }}
+              transition={{
+                duration: 0.5,
+                delay: 1 + i * 0.04,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              style={{ transformOrigin: `${x}px 40px` }}
+            />
+          );
+        })}
+      </g>
+
+      {[0, 1].map((i) => (
+        <motion.circle
+          key={`pulse-${i}`}
+          cx={cx}
+          cy={cy}
+          r={sphereR}
+          fill="none"
+          stroke="rgba(74,222,128,0.35)"
+          strokeWidth="1"
+          initial={{ scale: 0.85, opacity: 0.5 }}
+          animate={{ scale: 1.25, opacity: 0 }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            delay: i * 2,
+            ease: "easeOut",
+          }}
+          style={{ transformOrigin: `${cx}px ${cy}px` }}
         />
       ))}
-    </div>
+
+      <motion.g
+        animate={{ rotate: 360 }}
+        transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
+        style={{ transformOrigin: `${cx}px ${cy}px` }}
+      >
+        {satellites.map((s, i) => {
+          const p = polar(s.angle, s.radius, cx, cy);
+          return (
+            <g key={`sat-${i}`}>
+              <circle
+                cx={p.x}
+                cy={p.y}
+                r={s.size + 4}
+                fill={s.color}
+                opacity="0.12"
+                filter="url(#softGlow)"
+              />
+              <motion.circle
+                cx={p.x}
+                cy={p.y}
+                r={s.size}
+                fill={s.color}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: [0.7, 1, 0.7] }}
+                transition={{
+                  scale: { duration: 0.5, delay: 0.6 + s.delay },
+                  opacity: {
+                    duration: 2.5,
+                    repeat: Infinity,
+                    delay: s.delay,
+                  },
+                }}
+                style={{ transformOrigin: `${p.x}px ${p.y}px` }}
+              />
+            </g>
+          );
+        })}
+      </motion.g>
+
+      <motion.circle
+        cx={cx}
+        cy={cy}
+        r="6"
+        fill="rgba(74,222,128,0.9)"
+        animate={{ opacity: [0.6, 1, 0.6], scale: [1, 1.4, 1] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        style={{ transformOrigin: `${cx}px ${cy}px` }}
+        filter="url(#softGlow)"
+      />
+      <circle cx={cx} cy={cy} r="2.5" fill="rgba(220,255,235,0.95)" />
+    </svg>
   );
 }
 
@@ -295,16 +515,8 @@ function ScanLine() {
 }
 
 export default function Hero() {
-  const [featureIdx, setFeatureIdx] = useState(0);
   const [titleReady, setTitleReady] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFeatureIdx((prev) => (prev + 1) % rotatingFeatures.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setTitleReady(true), 300);
@@ -425,126 +637,14 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          <div className="relative hidden md:block">
-            <div className="grid grid-cols-2 gap-3">
-              {metricCards.map((card, i) => {
-                const c = colorMap[card.color];
-                return (
-                  <motion.div
-                    key={card.label}
-                    className={`relative backdrop-blur-md ${c.border} ${c.bg} border rounded-xl p-4 overflow-hidden group hover:border-opacity-60 transition-colors`}
-                    initial={{ opacity: 0, y: 24, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{
-                      duration: 0.5,
-                      delay: 0.6 + i * 0.1,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                    whileHover={{ y: -2, transition: { duration: 0.2 } }}
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">
-                          {card.label}
-                        </p>
-                        <p className={`text-2xl font-bold ${c.text} leading-none`}>
-                          {card.value}
-                        </p>
-                      </div>
-                      <MiniChart bars={card.bars} color={card.color} />
-                    </div>
-                    <p className="text-[10px] text-gray-600">{card.sub}</p>
-
-                    <motion.div
-                      className="absolute top-0 left-0 w-full h-px"
-                      style={{
-                        background: `linear-gradient(90deg, transparent, ${
-                          card.color === "green"
-                            ? "rgba(74,222,128,0.4)"
-                            : card.color === "cyan"
-                              ? "rgba(34,211,238,0.4)"
-                              : "rgba(139,92,246,0.4)"
-                        }, transparent)`,
-                      }}
-                      initial={{ scaleX: 0 }}
-                      animate={{ scaleX: 1 }}
-                      transition={{ duration: 0.8, delay: 0.8 + i * 0.1 }}
-                    />
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.4 }}
-              className="mt-3"
-            >
-              <div className="card-purple rounded-xl p-4 flex items-center backdrop-blur-sm">
-                <div className="flex items-center gap-3 w-full">
-                  <motion.div
-                    className="w-2 h-2 rounded-full bg-green-400 shrink-0"
-                    animate={{ opacity: [1, 0.3, 1] }}
-                    transition={{ duration: 1, repeat: Infinity }}
-                  />
-                  <AnimatePresence mode="wait">
-                    <motion.h3
-                      key={rotatingFeatures[featureIdx]}
-                      initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
-                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                      exit={{ opacity: 0, y: -16, filter: "blur(4px)" }}
-                      transition={{ duration: 0.4 }}
-                      className="text-lg md:text-xl font-bold text-white/90"
-                    >
-                      {rotatingFeatures[featureIdx]}
-                    </motion.h3>
-                  </AnimatePresence>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          <div className="md:hidden space-y-3">
-            <div className="grid grid-cols-2 gap-2">
-              {metricCards.slice(0, 4).map((card, i) => {
-                const c = colorMap[card.color];
-                return (
-                  <motion.div
-                    key={card.label}
-                    className={`${c.border} ${c.bg} border rounded-lg p-3`}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.5 + i * 0.08 }}
-                  >
-                    <p className="text-[9px] text-gray-500 uppercase tracking-wider">{card.label}</p>
-                    <p className={`text-xl font-bold ${c.text}`}>{card.value}</p>
-                  </motion.div>
-                );
-              })}
-            </div>
-            <div className="card-purple rounded-xl p-4 flex items-center">
-              <div className="flex items-center gap-3 w-full">
-                <motion.div
-                  className="w-2 h-2 rounded-full bg-green-400 shrink-0"
-                  animate={{ opacity: [1, 0.3, 1] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                />
-                <AnimatePresence mode="wait">
-                  <motion.h3
-                    key={`m-${rotatingFeatures[featureIdx]}`}
-                    initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, y: -16, filter: "blur(4px)" }}
-                    transition={{ duration: 0.4 }}
-                    className="text-lg font-bold text-white/90"
-                  >
-                    {rotatingFeatures[featureIdx]}
-                  </motion.h3>
-                </AnimatePresence>
-              </div>
-            </div>
-          </div>
+          <motion.div
+            className="relative"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <IntelligenceOrb />
+          </motion.div>
         </div>
       </div>
 

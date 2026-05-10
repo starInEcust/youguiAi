@@ -331,7 +331,7 @@ const infra = [
   },
   {
     title: "End-to-End Encryption",
-    desc: "Military-grade encryption for all data - in transit, at rest, and during processing - ensuring maximum security at every step.",
+    desc: "Enterprise-grade encryption for all data - in transit, at rest, and during processing - ensuring maximum security at every step.",
   },
   {
     title: "Continuous Compliance",
@@ -380,7 +380,7 @@ export default function SecurityPage() {
               Enterprise-Grade Security for Financial Intelligence
             </h1>
             <p className="text-sm text-gray-400 max-w-2xl mx-auto">
-              Neurova combines cutting-edge AI capabilities with military-grade
+              Neurova combines cutting-edge AI capabilities with enterprise-grade
               security, ensuring your sensitive financial data remains protected
               while delivering powerful insights.
             </p>
